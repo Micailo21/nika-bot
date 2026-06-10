@@ -64,7 +64,10 @@ def test():
         sheet = get_sheet()
         return jsonify({"ok": True, "sheet_title": sheet.title, "rows": sheet.row_count})
     except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+        logging.error(f"Test error: {repr(e)}")
+        creds_len = len(GOOGLE_CREDENTIALS)
+        creds_start = GOOGLE_CREDENTIALS[:30] if GOOGLE_CREDENTIALS else "EMPTY"
+        return jsonify({"ok": False, "error": repr(e), "creds_len": creds_len, "creds_start": creds_start}), 500
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8080))
